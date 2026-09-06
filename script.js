@@ -22,12 +22,36 @@ const pjCopy = document.querySelector("[data-pj-copy]");
 let pjData = null;
 let cnaeData = [];
 
-function trackWhatsappLead(source) {
-  if (typeof window.gtag !== "function") return;
+function trackWhatsappLead(source, url) {
+  const openWhatsapp = () => {
+    window.location.href = url;
+  };
+
+  if (typeof window.gtag !== "function") {
+    openWhatsapp();
+    return;
+  }
+
+  let didNavigate = false;
+  const navigateOnce = () => {
+    if (didNavigate) return;
+    didNavigate = true;
+    openWhatsapp();
+  };
+
+  window.gtag("event", "conversion", {
+    send_to: "AW-11038901326/XA7TCLeC9-8cEM6I4Y8p",
+    value: 1.0,
+    currency: "BRL",
+    event_callback: navigateOnce,
+  });
+
   window.gtag("event", "whatsapp_click", {
     event_category: "lead",
     event_label: source,
   });
+
+  setTimeout(navigateOnce, 800);
 }
 
 function updateHeader() {
@@ -64,13 +88,14 @@ form.addEventListener("submit", (event) => {
   );
 
   statusText.textContent = "Abrindo o WhatsApp para concluir o envio.";
-  trackWhatsappLead("formulario_contato");
-  window.location.href = `https://wa.me/5512981612085?text=${message}`;
+  trackWhatsappLead("formulario_contato", `https://wa.me/5512981612085?text=${message}`);
 });
 
 document.querySelectorAll('a[href^="https://wa.me/5512981612085"]').forEach((link) => {
-  link.addEventListener("click", () => {
-    trackWhatsappLead(link.hasAttribute("data-pj-whatsapp") ? "levantamento_pj" : "botao_whatsapp");
+  link.addEventListener("click", (event) => {
+    if (link.classList.contains("is-disabled")) return;
+    event.preventDefault();
+    trackWhatsappLead(link.hasAttribute("data-pj-whatsapp") ? "levantamento_pj" : "botao_whatsapp", link.href);
   });
 });
 
