@@ -1,0 +1,22 @@
+# Sistema operacional e editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs e arquivos temporarios
+*.log
+tmp/
+temp/
+*.tmp
+
+# Segredos locais
+.env
+.env.*
+!.env.example
+
+# Dependencias/builds, caso o projeto evolua para usar Node
+node_modules/
+dist/
+build/
+.cache/
