@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Abrindo WhatsApp | Brasil Mailing</title>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11038901326"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "AW-11038901326");
+      gtag("config", "G-4Y6PDMLR5E");
+    </script>
+    <style>
+      body {
+        align-items: center;
+        background: #f5f7f8;
+        color: #17202a;
+        display: flex;
+        font-family: Arial, sans-serif;
+        justify-content: center;
+        margin: 0;
+        min-height: 100vh;
+        padding: 24px;
+        text-align: center;
+      }
+
+      main { max-width: 520px; }
+      img { height: 88px; margin-bottom: 20px; width: 88px; }
+      h1 { font-size: 26px; margin: 0 0 12px; }
+      p { font-size: 17px; line-height: 1.5; margin: 0 0 24px; }
+      a { color: #0866ff; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="assets/logo-brasil-mailing.png" alt="Brasil Mailing">
+      <h1>Abrindo o WhatsApp</h1>
+      <p>Você será direcionado para concluir sua solicitação com a Brasil Mailing.</p>
+      <a data-whatsapp-fallback href="https://wa.me/5512981612085">Abrir WhatsApp</a>
+    </main>
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const message = params.get("text");
+      const whatsappUrl = new URL("https://wa.me/5512981612085");
+
+      if (message) {
+        whatsappUrl.searchParams.set("text", message);
+      }
+
+      document.querySelector("[data-whatsapp-fallback]").href = whatsappUrl.href;
+      setTimeout(() => window.location.replace(whatsappUrl.href), 1200);
+    </script>
+  </body>
+</html>

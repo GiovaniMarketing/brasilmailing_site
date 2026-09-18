@@ -23,8 +23,16 @@ let pjData = null;
 let cnaeData = [];
 
 function trackWhatsappLead(source, url) {
+  const whatsappUrl = new URL(url);
+  const trackingUrl = new URL("/contato-whatsapp.html", window.location.origin);
+  const message = whatsappUrl.searchParams.get("text");
+
+  if (message) {
+    trackingUrl.searchParams.set("text", message);
+  }
+
   const openWhatsapp = () => {
-    window.location.href = url;
+    window.location.href = trackingUrl.href;
   };
 
   if (typeof window.gtag !== "function") {
