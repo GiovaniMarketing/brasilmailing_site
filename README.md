@@ -26,3 +26,14 @@ O arquivo `render.yaml` tambem deixa essa configuracao pronta para Blueprint no 
 O site direciona pedidos para o WhatsApp:
 
 `12 98161-2085`
+
+## Rastreamento de conversoes
+
+As configuracoes ficam centralizadas em `tracking.js`.
+
+- Google Ads: contato pelo WhatsApp (`generate_lead` e conversao direta).
+- Google Analytics: levantamento gerado, pedido copiado e clique no WhatsApp.
+- Meta: PageView, Lead e EstimateGenerated quando `metaPixelId` estiver preenchido.
+
+Para ativar o Pixel da Meta, informe no campo `metaPixelId` o ID pertencente a
+Brasil Mailing. Nao reutilize IDs de outros negocios.

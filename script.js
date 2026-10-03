@@ -35,7 +35,7 @@ function trackWhatsappLead(source, url) {
     window.location.href = trackingUrl.href;
   };
 
-  if (typeof window.gtag !== "function") {
+  if (!window.BrasilMailingTracking) {
     openWhatsapp();
     return;
   }
@@ -47,17 +47,11 @@ function trackWhatsappLead(source, url) {
     openWhatsapp();
   };
 
-  window.gtag("event", "conversion", {
-    send_to: "AW-11038901326/XA7TCLeC9-8cEM6I4Y8p",
-    value: 1.0,
-    currency: "BRL",
-    event_callback: navigateOnce,
+  window.BrasilMailingTracking.event("whatsapp_click", {
+    lead_source: source,
+    link_url: whatsappUrl.origin + whatsappUrl.pathname,
   });
-
-  window.gtag("event", "whatsapp_click", {
-    event_category: "lead",
-    event_label: source,
-  });
+  window.BrasilMailingTracking.lead(source, navigateOnce);
 
   setTimeout(navigateOnce, 800);
 }
@@ -99,7 +93,7 @@ form.addEventListener("submit", (event) => {
   trackWhatsappLead("formulario_contato", `https://wa.me/5512981612085?text=${message}`);
 });
 
-document.querySelectorAll('a[href^="https://wa.me/5512981612085"]').forEach((link) => {
+document.querySelectorAll('a[href^="https://wa.me/5512981612085"], [data-pj-whatsapp]').forEach((link) => {
   link.addEventListener("click", (event) => {
     if (link.classList.contains("is-disabled")) return;
     event.preventDefault();
@@ -421,6 +415,14 @@ if (pjForm) {
     const data = new FormData(pjForm);
     updatePjResult(result, data, true);
     const total = result?.total || 0;
+    if (total) {
+      window.BrasilMailingTracking?.event(
+        "pj_estimate_generated",
+        { estimated_records: total, lead_source: "levantamento_pj" },
+        { name: "EstimateGenerated", custom: true, parameters: { estimated_records: total } },
+        { dedupe: true, dedupeKey: `estimate:${JSON.stringify([...data.entries()])}` }
+      );
+    }
     pjForm.querySelector("[data-pj-status]").textContent = total
       ? `Pedido preparado com ${formatNumber(total)} registros estimados.`
       : "Nenhum volume encontrado para os filtros selecionados.";
@@ -429,6 +431,10 @@ if (pjForm) {
     if (!pjOrderText.textContent) return;
     try {
       await navigator.clipboard.writeText(pjOrderText.textContent);
+      window.BrasilMailingTracking?.event("pj_order_copied", {
+        lead_source: "levantamento_pj",
+        estimated_records: Number((pjTotal.textContent || "").replace(/\D/g, "")) || 0,
+      });
       pjForm.querySelector("[data-pj-status]").textContent = "Pedido copiado.";
     } catch {
       pjForm.querySelector("[data-pj-status]").textContent = "Selecione o texto do pedido para copiar.";
