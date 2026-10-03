@@ -33,7 +33,7 @@ As configuracoes ficam centralizadas em `tracking.js`.
 
 - Google Ads: contato pelo WhatsApp (`generate_lead` e conversao direta).
 - Google Analytics: levantamento gerado, pedido copiado e clique no WhatsApp.
-- Meta: PageView, Lead e EstimateGenerated quando `metaPixelId` estiver preenchido.
+- Meta: PageView, Lead e EstimateGenerated no Pixel Brasil Mailing - Site.
 
-Para ativar o Pixel da Meta, informe no campo `metaPixelId` o ID pertencente a
-Brasil Mailing. Nao reutilize IDs de outros negocios.
+O `metaPixelId` configurado pertence exclusivamente a Brasil Mailing. Nao
+reutilize esse ID em outros negocios.

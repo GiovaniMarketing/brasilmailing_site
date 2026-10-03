@@ -3,7 +3,7 @@ window.BrasilMailingTracking = (() => {
     googleAdsId: "AW-11038901326",
     googleAnalyticsId: "G-4Y6PDMLR5E",
     whatsappConversion: "AW-11038901326/XA7TCLeC9-8cEM6I4Y8p",
-    metaPixelId: "",
+    metaPixelId: "1066513032935979",
   };
 
   const recentEvents = new Map();
