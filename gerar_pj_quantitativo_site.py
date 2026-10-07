@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+from datetime import datetime
 from pathlib import Path
 
 import pyodbc
@@ -50,7 +51,7 @@ def main() -> None:
             dbo_digits = LEFT(REPLACE(REPLACE(REPLACE(REPLACE(ISNULL(cnae_principal,''),'.',''),'-',''),'/',''),' ',''), 2),
             FIXO_1, FIXO_2, FIXO_3, FIXO_4, FIXO_5,
             CELULAR_1, CELULAR_2, CELULAR_3, CELULAR_4, CELULAR_5
-        FROM dbo.tb_marketing_consolidado_FINAL WITH (NOLOCK)
+        FROM dbo.vw_marketing_consolidado_operacional_validada
     ) AS base
     WHERE uf <> ''
       AND cidade <> ''
@@ -95,7 +96,7 @@ def main() -> None:
             totals["ambos"] += ambos
 
     payload = {
-        "updatedAt": "2026-09-04",
+        "updatedAt": datetime.now().date().isoformat(),
         "grain": "uf_cidade_cnae_classe",
         "totals": totals,
         "cnaeClasses": sorted(cnae_classes),
@@ -103,7 +104,9 @@ def main() -> None:
         "rows": rows,
     }
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    temporary_output = OUTPUT.with_suffix(".json.tmp")
+    temporary_output.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    temporary_output.replace(OUTPUT)
     print(f"Arquivo gerado: {OUTPUT}")
     print(f"Linhas agregadas: {len(rows):,}")
     print(f"Tamanho MB: {OUTPUT.stat().st_size / 1024 / 1024:.2f}")
